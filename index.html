@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <!-- title of the page -->
+    <title>Frontend Mentor | Advice generator app</title>
+    <!-- Manrope font link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* removeing default styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Manrope";
+      }
+      /* adding styling to the body */
+      body {
+        background-color: hsl(218, 23%, 16%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 95vh;
+        margin: 10px;
+      }
+      /* the advice container styling */
+      .advice-container {
+        width: 500px;
+        padding: 30px;
+        border-radius: 10px;
+        background-color: hsl(217, 19%, 24%);
+        text-align: center;
+        flex-direction: column;
+      }
+      /* the divider img styling */
+      .divider-img {
+        width: 100%;
+      }
+      /* adding margin to the div for spacing */
+      div {
+        margin: 25px 10px;
+      }
+      /* removing maring to set the button */
+      .genrateNewAdviceContainer {
+        margin: -55px -10px;
+      }
+      /* styling of the breaker */
+      .breaker {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* styling button */
+      #generateAdive {
+        background-color: hsl(150, 100%, 66%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 60px;
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for glow and scaling effect */
+      }
+      /* styling butong img for animation */
+      #generateAdive img {
+        animation: rotateDice 2s linear infinite; /* Rotates the dice infinitely */
+      }
+      /* the main container styling just for the button ui */
+      .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      /* adding hover effect for the button */
+      #generateAdive:hover {
+        box-shadow: 0 0 20px 10px rgba(80, 255, 150, 0.7); /* Glowing effect */
+        transform: scale(1.1); /* Slight scaling effect on hover */
+      }
+      /* styling the advice number */
+
+      #adviceId {
+        color: hsl(150, 100%, 66%);
+        letter-spacing: 3px;
+        font-weight: 800;
+      }
+      /* styling the advice text */
+      .adive {
+        font-size: 28px;
+        font-weight: 800;
+        color: hsl(193, 38%, 86%);
+      }
+      /* this is showing the desktop divider img */
+      .show {
+        display: block;
+      }
+      /* this is hiding the mobile divider img */
+      .none {
+        display: none;
+      }
+      /* animation for the dice */
+      @keyframes rotateDice {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      /* media queries for the responsiveness */
+      @media (max-width: 600px) {
+        /* setting the advice-container 100% for good setting for mobiles like devices */
+        .advice-container {
+          width: 100%;
+        }
+        /* changeing the font-size for good ui */
+        .adive {
+          font-size: 22px;
+        }
+        /* changeing the margin for good ui */
+        div {
+          margin: 20px 10px;
+        }
+        /* this is showing the mobile divider img */
+        .show {
+          display: none;
+        }
+        /* this is hiding the desktop divider img */
+        .none {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- the main container -->
+    <div class="main-container">
+      <!-- the advice main cotanier -->
+      <div class="advice-container">
+        <!-- Advice ID goes here -->
+        <div class="advice-id">
+          <p id="adviceId">ADVICE #177</p>
+        </div>
+        <!-- Advice text goes here -->
+        <div class="adive">
+          <p>
+            "It is easy to sit up and take notice, what's difficult is getting
+            up and taking action."
+          </p>
+        </div>
+        <!-- the breaker img is  -->
+        <div class="breaker">
+          <img
+            class="divider-img show"
+            src="./images/pattern-divider-mobile.svg"
+            alt=""
+          />
+          <img
+            class="divider-img none"
+            src="./images/pattern-divider-mobile.svg"
+            alt=""
+          />
+        </div>
+      </div>
+      <!-- the button main container -->
+      <div class="genrateNewAdviceContainer">
+        <!-- the button to generate new advice -->
+        <button onclick="generateAdive()" id="generateAdive">
+          <!-- the dice img of the button -->
+          <img src="./images/icon-dice.svg" alt="" />
+        </button>
+      </div>
+    </div>
+    <!-- js for genrating new advice -->
+    <script>
+      // getting advice text and adivce if
+      const displayAdvice = document.querySelector(".adive");
+      const displayAdiveId = document.querySelector("#adviceId");
+      // function for genratinf new adivce
+
+      const generateAdive = () => {
+        // fetching the api
+        fetch("https://api.adviceslip.com/advice")
+          .then((response) => response.json())
+          .then((data) => {
+            // display the fetched advice id
+            displayAdiveId.innerText = `ADVICE #${data.slip.id}`;
+            // display the fetched advice
+            displayAdvice.innerText = `"${data.slip.advice}"`;
+          })
+          // in case if the api does not fetch then it should display error
+          .catch((error) => {
+            displayAdvice.innerText = `Error while fetching data ${error}`;
+            // display error to the console window
+            console.error("Error fetching advice:", error);
+          });
+      };
+    </script>
+  </body>
+</html>
